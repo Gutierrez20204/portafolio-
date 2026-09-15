@@ -181,17 +181,20 @@ html.lenis, html.lenis body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: var(--color-paper-white);
-  border: var(--border-sticker);
-  border-radius: var(--radius-full);
-  font-family: var(--font-lateral);
-  font-size: 24px;
-  color: var(--color-carbon);
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
   text-decoration: none;
-  box-shadow: 2px 2px 0px rgba(0,0,0,1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, filter 0.2s;
+}
+.logo-mark:hover {
+  filter: drop-shadow(0 4px 12px rgba(77, 162, 255, 0.4));
+}
+
+.logo-mark img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -573,9 +576,9 @@ html.lenis, html.lenis body {
   .sticker-wallet { width: 50px; height: 40px; font-size: 20px; }
   
   /* Reajustar posiciones absolutas de stickers para evitar sobreponer texto */
-  .hero .sticker-rocket { top: 5% !important; right: -5% !important; }
-  .hero .sticker-coin { bottom: 5% !important; left: -5% !important; }
-  .hero .sticker-check { bottom: 15% !important; right: 0% !important; }
+  .hero .sticker-rocket { top: 5% !important; right: 5% !important; }
+  .hero .sticker-coin { bottom: 5% !important; left: 5% !important; }
+  .hero .sticker-check { bottom: 20% !important; right: 5% !important; }
 }
 
 /* Custom Cursor */
