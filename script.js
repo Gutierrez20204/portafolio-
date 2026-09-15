@@ -39,12 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
             marqueeContent.style.transform = `translate3d(${marqueePosition}px, 0, 0)`;
         }
 
-        // True Scroll Parallax (Setting translate property to avoid overwriting CSS transforms)
+        // True Scroll Parallax relative to viewport center
         const scrollParallaxElements = document.querySelectorAll('.parallax');
+        const vh = window.innerHeight;
         scrollParallaxElements.forEach(el => {
             const speedAttr = parseFloat(el.getAttribute('data-speed')) || 0.05;
-            // The sticker moves relative to scroll position
-            const yOffset = e.scroll * speedAttr * -3; 
+            // Get parent rect to avoid self-referential translation issues
+            const rect = el.parentElement.getBoundingClientRect();
+            const distFromCenter = rect.top + (rect.height / 2) - (vh / 2);
+            const yOffset = distFromCenter * speedAttr; 
             el.style.translate = `0px ${yOffset}px`;
         });
     });
@@ -280,4 +283,22 @@ document.addEventListener('DOMContentLoaded', () => {
             lenis.scrollTo(0, { duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
         });
     }
+
+    // Tabs Logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.style.display = 'none');
+
+            btn.classList.add('active');
+            const targetId = btn.getAttribute('data-tab');
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) {
+                targetPane.style.display = 'flex';
+            }
+        });
+    });
 });
