@@ -88,13 +88,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 0.2 Card Glow Logic
     const glowCards = document.querySelectorAll('[data-glow="true"]');
     glowCards.forEach(card => {
+        let cardTicking = false;
         card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; 
-            const y = e.clientY - rect.top;  
-            // Actualiza variables CSS de coordenadas
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
+            if (!cardTicking) {
+                window.requestAnimationFrame(() => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; 
+                    const y = e.clientY - rect.top;  
+                    // Actualiza variables CSS de coordenadas
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                    cardTicking = false;
+                });
+                cardTicking = true;
+            }
         });
     });
 
@@ -165,22 +172,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    let parallaxTicking = false;
     window.addEventListener('mousemove', (e) => {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        
-        parallaxElements.forEach(el => {
-            const speed = parseFloat(el.getAttribute('data-speed')) || 0.05;
-            const x = (mouseX - centerX) * speed;
-            const y = (mouseY - centerY) * speed;
-            
-            // Note: We use margin to move them so we don't override the CSS transform animations (float/spin)
-            el.style.marginLeft = `${x}px`;
-            el.style.marginTop = `${y}px`;
-        });
+        if (!parallaxTicking) {
+            window.requestAnimationFrame(() => {
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                parallaxElements.forEach(el => {
+                    const speed = parseFloat(el.getAttribute('data-speed')) || 0.05;
+                    const x = (mouseX - centerX) * speed;
+                    const y = (mouseY - centerY) * speed;
+                    
+                    el.style.marginLeft = `${x}px`;
+                    el.style.marginTop = `${y}px`;
+                });
+                parallaxTicking = false;
+            });
+            parallaxTicking = true;
+        }
     });
 
     // 3. 3D "Inflatable Ribbon" Canvas Simulation
@@ -223,10 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.lineTo(x, y);
             }
             
-            ctx.shadowColor = 'rgba(0,0,0,0.15)';
-            ctx.shadowBlur = 30;
-            ctx.shadowOffsetX = 15;
-            ctx.shadowOffsetY = 15;
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
 
             ctx.stroke();
 
